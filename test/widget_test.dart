@@ -18,6 +18,15 @@ void main() {
     // Verify that the RocketStationDashboard is initially displayed
     expect(find.byType(RocketStationDashboard), findsOneWidget);
 
+
+  // Verify that all sensor charts are present
+  expect(find.byType(SensorChart), findsNWidgets(6));
+  expect(find.text('Thrust (kN)'), findsOneWidget);
+  expect(find.text('Speed (km/h)'), findsOneWidget);
+  expect(find.text('Altitude (m)'), findsOneWidget);
+  expect(find.text('Attitude'), findsOneWidget);
+  expect(find.text('Acceleration (km/h)'), findsOneWidget);
+  expect(find.text('Temperature (°C)'), findsOneWidget);
     // Tap the "Telemetry" navigation rail destination
     await tester.tap(find.byIcon(Icons.show_chart));
     await tester.pump();
