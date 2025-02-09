@@ -4,6 +4,10 @@
 
 Rocket Station is an application designed to visualize and control rocket models. This project provides a user-friendly interface for interacting with and managing various aspects of rocket simulations or real-time rocket data. The application leverages Flutter's cross-platform capabilities to deliver a seamless experience across different devices.
 
+The application includes a Telemetry page that displays sensor data charts for Thrust, Speed, and Altitude. The Telemetry page can be accessed from the left navigation rail by selecting the "Telemetry" destination.
+
+![Telemetry Page](telemetry_page.png)
+
 ![Home of the Rocket Station software](home.png)
 
 ## Getting Started

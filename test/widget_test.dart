@@ -15,6 +15,21 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
+    // Verify that the RocketStationDashboard is initially displayed
+    expect(find.byType(RocketStationDashboard), findsOneWidget);
+
+    // Tap the "Telemetry" navigation rail destination
+    await tester.tap(find.byIcon(Icons.show_chart));
+    await tester.pump();
+
+    // Verify that the TelemetryPage is displayed
+    expect(find.byType(TelemetryPage), findsOneWidget);
+  });
+
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
@@ -28,3 +43,4 @@ void main() {
     expect(find.text('1'), findsOneWidget);
   });
 }
+
