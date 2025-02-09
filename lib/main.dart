@@ -48,6 +48,11 @@ class _RocketStationDashboardState extends State<RocketStationDashboard> {
               setState(() {
                 _selectedIndex = index;
               });
+              if (index == 0) {
+                // Navigate to RocketStationDashboard
+              } else if (index == 1) {
+                // Navigate to TelemetryPage
+              }
             },
             labelType: NavigationRailLabelType.all,
             destinations: const [
@@ -56,8 +61,8 @@ class _RocketStationDashboardState extends State<RocketStationDashboard> {
                 label: Text('Home'),
               ),
               NavigationRailDestination(
-                icon: Icon(Icons.data_usage),
-                label: Text('Data'),
+                icon: Icon(Icons.show_chart),
+                label: Text('Telemetry'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.video_library),
@@ -89,6 +94,7 @@ class _RocketStationDashboardState extends State<RocketStationDashboard> {
                       children: [
                         Expanded(
                           flex: 3,
+                          flex: _selectedIndex == 0 ? 3 : 1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -96,45 +102,11 @@ class _RocketStationDashboardState extends State<RocketStationDashboard> {
                               const SizedBox(height: 16),
                               Expanded(
                                 child: Card(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Sensor Data',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                        Expanded(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: SensorChart(
-                                                  title: 'Thrust (kN)',
-                                                  color: Colors.purple,
-                                                  data: _generateRandomData(),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child: SensorChart(
-                                                  title: 'Speed (km/h)',
-                                                  color: Colors.orange,
-                                                  data: _generateRandomData(),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child: SensorChart(
-                                                  title: 'Altitude (m)',
-                                                  color: Colors.green,
-                                                  data: _generateRandomData(),
-                                                ),
-                                              ),
+                                  child: _selectedIndex == 0
+                                      ? const RocketStationDashboard()
+                                      : const TelemetryPage(),
+                                ),
+                              ),
                                             ],
                                           ),
                                         ),
@@ -162,6 +134,7 @@ class _RocketStationDashboardState extends State<RocketStationDashboard> {
       ),
     );
   }
+}
 
   List<FlSpot> _generateRandomData() {
     final random = math.Random();
