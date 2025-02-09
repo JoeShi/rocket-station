@@ -1,0 +1,44 @@
+SchemaVersion: 1.0
+Name: rocket-station-workflow  
+Triggers:
+  - Source:
+      Provider: CodeCatalystSourceProvider
+      Workflow: onPushToMainDeployPipeline
+    Type: PUSH
+Actions:
+  CreateTelemetryPage:
+    Identifier: aws/flutter-build@v1
+    Configuration:
+      ProjectPath: .
+      BuildCommand: flutter create lib/pages/telemetry_page.dart
+    Outputs:
+      ArtifactPaths:
+        - lib/pages/telemetry_page.dart
+
+  UpdateNavigationRail:
+    Identifier: aws/flutter-build@v1 
+    Configuration:
+      ProjectPath: .
+      BuildCommand: |
+        sed -i '' 's/Home/Telemetry/' lib/widgets/navigation_rail.dart
+        sed -i '' 's/Icons.home/Icons.show_chart/' lib/widgets/navigation_rail.dart  
+        sed -i '' '/case 0:/a\         Navigator.pushNamed(context, "/");' lib/widgets/navigation_rail.dart
+        sed -i '' '/case 1:/a\         Navigator.pushNamed(context, "/telemetry");' lib/widgets/navigation_rail.dart
+        sed -i '' '/routes:/a\         "/": (context) => RocketStationDashboard(),\         "/telemetry": (context) => TelemetryPage(),' lib/main.dart
+    Inputs:
+      SourceArtifact:
+        Provider: CodeCatalystArtifactProvider
+        Artifacts:
+          - CreateTelemetryPage/ArtifactPaths
+
+  DeployToStaging:
+    Identifier: aws/flutter-deploy@v1
+    Configuration:
+      Environment: staging  
+      Role: arn:aws:iam::123456789012:role/CodeCatalystDeploymentRole
+      Connection: arn:aws:codestar-connections:us-west-2:123456789012:connection/abc123
+    Inputs:
+      SourceArtifact:
+        Provider: CodeCatalystArtifactProvider
+        Artifacts:
+          - UpdateNavigationRail/ArtifactPaths
